@@ -86,7 +86,7 @@ const facets=[
 ];
 const types={idea:{name:'فكرة',plural:'أفكاري',icon:'✧'},goal:{name:'هدف',plural:'أهدافي',icon:'↗'},moment:{name:'لحظة',plural:'لحظاتي',icon:'◷'}};
 let activeFacet='personal',editing=null,activeFilters={ideas:'all',goals:'all',moments:'all',library:'all'};
-function data(){try{return JSON.parse(localStorage.getItem('miratiDataV2')||'{}')}catch(e){return{}}}
+function data(){try{const v=JSON.parse(localStorage.getItem('miratiDataV2')||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}catch(e){return{}}}
 function store(d){try{localStorage.setItem('miratiDataV2',JSON.stringify(d));return true}catch(e){toast('مساحة التخزين ممتلئة؛ صدّر نسخة احتياطية أولًا');return false}}
 function ensure(){let d=data();if(!localStorage.getItem('miratiDataV2')){try{const legacy=JSON.parse(localStorage.getItem('miratiData')||'null');if(legacy&&typeof legacy==='object'){d={name:legacy.name||'',bio:'',facets:legacy.facets||{},ideas:(legacy.notes||[]).map(n=>({id:uid(),type:'idea',title:n.title||'تأمل سابق',body:n.body||'',tags:[],facet:n.facet||'none',created:new Date().toISOString(),updated:new Date().toISOString()})),goals:[],moments:[]};localStorage.setItem('miratiDataV2',JSON.stringify(d))}}catch(e){}}['ideas','goals','moments'].forEach(k=>{if(!Array.isArray(d[k]))d[k]=[]});if(!d.facets)d.facets={};return d}
 function uid(){return 'm'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
