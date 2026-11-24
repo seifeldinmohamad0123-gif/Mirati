@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setLoadsImagesAutomatically(true);
         settings.setAllowFileAccess(true);
         settings.setDatabaseEnabled(true);
         webView.setWebViewClient(new WebViewClient());
