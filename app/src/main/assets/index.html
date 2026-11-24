@@ -138,6 +138,30 @@ body{background-image:radial-gradient(ellipse at 82% 7%,rgba(142,125,255,.17),tr
 @media(min-width:600px){.app{padding:27px 27px 38px}.cards{grid-template-columns:repeat(3,1fr);gap:14px}.identity-card{min-height:165px;padding:18px}.hero{min-height:250px;padding:30px}.hero h2{font-size:26px}.welcome h1{font-size:30px}}
 @media(max-width:380px){.app{padding-left:13px;padding-right:13px}.welcome h1{font-size:23px}.date-chip{font-size:8px;padding:8px}.identity-card{min-height:143px;padding:13px}.nav button{min-width:0;padding:6px 5px;font-size:9px}.nav .ni{width:26px;height:26px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Mirati refined glass palette: pearl, slate blue, deep petrol and muted champagne */
+:root{--bg:#f3f1ec;--paper:#fbfaf7;--ink:#26333b;--muted:#7c8587;--line:#e5e0d7;--blue:#587989;--violet:#8b9da4;--cyan:#9eb7b8;--shadow:0 18px 42px rgba(45,59,65,.10);--shadow-soft:0 8px 22px rgba(45,59,65,.07);--glass:rgba(255,255,255,.66)}
+body{background:radial-gradient(ellipse at 92% 0%,rgba(184,163,132,.13),transparent 34%),radial-gradient(ellipse at 0% 45%,rgba(116,151,160,.10),transparent 32%),linear-gradient(180deg,#f8f6f1 0%,#eeece6 100%)}
+.hero,.profile-hero{background:linear-gradient(118deg,#263f50 0%,#456777 54%,#8b9fa2 100%);box-shadow:0 22px 48px rgba(39,62,75,.22),inset 0 1px 0 #ffffff66}
+.hero .eyebrow{color:#e2d4bd}.hero p,.profile-hero p{color:#e8eeec}.hero button{color:#3e5966;background:linear-gradient(135deg,#fffdf8,#e9e5dc)}
+.orb{background:radial-gradient(circle at 30% 23%,#fff 0%,#e7e1d5 17%,#a8c0c1 42%,#53798a 72%,#2b4656 100%);box-shadow:inset -12px -14px 22px #203a4a66,inset 8px 8px 18px #ffffffc2,0 0 0 12px #ffffff0d,0 0 0 27px #ffffff08,0 16px 35px #172c3a55}
+.primary,.filter.active{background:linear-gradient(115deg,#496b7b,#78949b 62%,#b49a76);box-shadow:0 9px 20px #3c59652c,inset 0 1px 0 #ffffff66}
+.eyebrow{color:#6d8790}.text-link{color:#587989}.soft-btn{border-color:#e0d9cc;background:linear-gradient(135deg,#f7f4ed,#e9e5dc);color:#526f7c}
+.nav button.active{color:#476a79;background:linear-gradient(145deg,#f1eee7,#e2e8e5);box-shadow:0 5px 15px #3d5c681c,inset 0 1px 0 #fff}
+.nav button.active .ni{filter:drop-shadow(0 2px 4px #55778655)}
+.symbol{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(255,255,255,.82);background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(216,225,222,.66));box-shadow:inset 0 1.5px 0 #fff, inset 0 -7px 14px rgba(70,91,99,.10),0 8px 16px rgba(41,61,70,.12);backdrop-filter:blur(12px)}
+.symbol:before{content:"";position:absolute;inset:1px;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.68),transparent 43%,rgba(255,255,255,.08));pointer-events:none;z-index:1}
+.symbol:after{content:"";position:absolute;width:60%;height:28%;top:5%;left:8%;border-radius:50%;background:rgba(255,255,255,.38);filter:blur(8px);transform:rotate(-22deg);pointer-events:none}
+.symbol .feature-icon{position:relative;z-index:2;width:32px;height:32px;filter:drop-shadow(0 2px 2px rgba(31,52,62,.22))}
+.identity-card .symbol{width:48px;height:48px;border-radius:17px 17px 17px 7px}
+.c1,.c2,.c3,.c4,.c5,.c6{background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(208,220,218,.72));color:#536f7d}
+.identity-card{background:linear-gradient(145deg,#fffefa 0%,#fbfaf6 60%,#e9eeeb 100%);border-color:#fffdf8;box-shadow:0 13px 30px rgba(48,62,66,.075),inset 0 1px 0 #fff}
+.identity-card:before{background:radial-gradient(circle,rgba(128,157,162,.20),transparent 70%)}
+.stat,.reflection,.panel,.item-card,.profile-card,.progress-card{background:linear-gradient(145deg,rgba(255,254,250,.96),rgba(240,240,234,.94));border-color:#fffdf8}
+.tag{background:linear-gradient(135deg,#f0eee7,#e4e9e5);color:#61747a;border-color:#fff}
+.page-title:after{background:linear-gradient(90deg,#597b89,#c2a77e);box-shadow:0 2px 8px rgba(82,112,125,.2)}
+#identity,#ideas,#goals,#moments,#library,#journey{--accent-a:#597b89;--accent-b:#bba17d}
+#ideas .page-head .primary,#goals .page-head .primary,#moments .page-head .primary{background:linear-gradient(120deg,#496b7b,#8ca5a5);box-shadow:0 10px 23px rgba(66,93,103,.2),inset 0 1px 0 #ffffff70}
 </style></head>
 <body>
 <div class="app">
@@ -210,23 +234,23 @@ function openSearch(){openPage('library');setTimeout(()=>document.getElementById
 function renderAll(){const active=document.querySelector('.page.active');renderActivePage(active?active.id:'home')}
 function renderRecent(){const d=ensure(),all=[...d.ideas,...d.goals,...d.moments].sort((a,b)=>(b.updated||b.created||'').localeCompare(a.updated||a.created||'')).slice(0,3);document.getElementById('recentList').innerHTML=all.length?all.map(itemCard).join(''):'<div class="empty"><b>مساحتك ما زالت تنتظر أول إضافة</b>ابدأ بفكرة أو هدف أو لحظة تريد الاحتفاظ بها.</div>'}
 function facetIcon(id){
-const icons={
-personal:'<circle cx="24" cy="16" r="7" fill="url(#g)"/><path d="M10 40c.8-8 5.5-12 14-12s13.2 4 14 12" fill="url(#g)" opacity=".92"/><path d="M5 23c3-10 10-16 19-16s16 6 19 16" fill="none" stroke="#fff" stroke-width="2.2" opacity=".7"/>',
-social:'<circle cx="17" cy="17" r="6" fill="url(#g)"/><circle cx="32" cy="19" r="5.5" fill="#e99ab7"/><path d="M5 39c.7-7 4.7-11 12-11 5 0 8.5 2.1 10.2 6.3M25 39c.6-6.2 3.8-9.4 9-9.4 5.3 0 8.2 3.2 9 9.4" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
-digital:'<rect x="12" y="5" width="24" height="38" rx="6" fill="url(#g)"/><rect x="16" y="10" width="16" height="24" rx="2" fill="#fff" opacity=".92"/><path d="m20 22 3 3 6-7M21 38h6" fill="none" stroke="#4a9f99" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-career:'<rect x="6" y="15" width="36" height="25" rx="5" fill="url(#g)"/><path d="M17 15v-4a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4M6 25h36M20 25v4h8v-4" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>',
-intellect:'<path d="M24 5c-9 0-15 6.5-15 14.5 0 5 2.4 8.2 6.5 11.2V39h17v-8.3c4.1-3 6.5-6.2 6.5-11.2C39 11.5 33 5 24 5Z" fill="url(#g)"/><path d="M24 12v15M17 19c0-3 2.2-5 5-5M31 19c0-3-2.2-5-5-5M18 34h12M19 39h10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
-aspirations:'<path d="m5 37 12-17 7 9 7-15 12 23H5Z" fill="url(#g)"/><path d="m8 13 10-7 8 5 10-5M33 6h3v3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-idea:'<path d="M24 5a13 13 0 0 0-8 23c2 1.5 3 3.2 3 5h10c0-1.8 1-3.5 3-5A13 13 0 0 0 24 5Z" fill="url(#g)"/><path d="M19 39h10M20 34h8M24 10v8M20 14h8" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/>',
-goal:'<circle cx="24" cy="24" r="18" fill="url(#g)" opacity=".22"/><circle cx="24" cy="24" r="14" fill="none" stroke="url(#g)" stroke-width="4"/><circle cx="24" cy="24" r="7" fill="url(#g)"/><path d="m24 24 16-16M32 8h8v8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>',
-moment:'<rect x="7" y="9" width="34" height="32" rx="7" fill="url(#g)"/><path d="M15 5v9M33 5v9M7 18h34M24 23v8l6 3" fill="none" stroke="#fff" stroke-width="2.7" stroke-linecap="round"/>',
-library:'<path d="M7 9c7-3 12-2 17 2v29c-5-4-10-5-17-2V9ZM41 9c-7-3-12-2-17 2v29c5-4 10-5 17-2V9Z" fill="url(#g)"/><path d="M12 16c3-1 6-.5 9 1M12 23c3-1 6-.5 9 1M36 16c-3-1-6-.5-9 1M36 23c-3-1-6-.5-9 1" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>',
-journey:'<path d="M8 36c8 0 8-14 16-14s8 8 16-3" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/><circle cx="9" cy="12" r="6" fill="url(#g)"/><circle cx="40" cy="9" r="6" fill="#73cdd5"/><circle cx="25" cy="22" r="3" fill="#fff"/>'
+const shapes={
+personal:'<circle cx="24" cy="16" r="7.2" class="main"/><path d="M10 41c1-8.1 5.8-12.1 14-12.1S37 32.9 38 41" class="main"/><path d="M9 21c2.5-8.8 8-13.2 15-13.2S36.5 12.2 39 21" class="shine"/>',
+social:'<circle cx="17" cy="17" r="6.2" class="main"/><circle cx="32" cy="18.5" r="5.4" class="second"/><path d="M5.5 40c.8-7.1 4.6-10.8 11.5-10.8 5.2 0 8.7 2.2 10.1 6.5M25 40c.7-6.4 4-9.7 9.1-9.7 5.2 0 8.2 3.3 9 9.7" class="outline"/>',
+digital:'<rect x="13" y="5.5" width="22" height="37" rx="5.5" class="main"/><rect x="16.5" y="10" width="15" height="25" rx="2.2" class="glass"/><path d="m20 22 3 3 6-7M21 38h6" class="detail"/>',
+career:'<rect x="6" y="15" width="36" height="26" rx="5" class="main"/><path d="M17 15v-4a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4M6 25h36M20 25v4h8v-4" class="outline"/>',
+intellect:'<path d="M24 5.5c-8.8 0-14.8 6.5-14.8 14.2 0 5 2.5 8.6 6.6 11.5v3.2h16.4v-3.2c4.1-2.9 6.6-6.5 6.6-11.5C38.8 12 32.8 5.5 24 5.5Z" class="main"/><path d="M18.5 21a5.5 5.5 0 0 1 11 0M24 13v13M18.5 35h11M20 40h8" class="outline"/>',
+aspirations:'<path d="m5 39 12-17 7 9 7-16 12 24H5Z" class="main"/><path d="m8 13 10-7 8 5 10-5M33 6h3v3" class="shine"/>',
+idea:'<path d="M24 5.5a13 13 0 0 0-8 23c2 1.5 3 3.2 3 5h10c0-1.8 1-3.5 3-5a13 13 0 0 0-8-23Z" class="main"/><path d="M19 39h10M20 34h8M24 11v8M20 15h8" class="outline"/>',
+goal:'<circle cx="24" cy="24" r="18" class="halo"/><circle cx="24" cy="24" r="13.5" class="ring"/><circle cx="24" cy="24" r="6.5" class="main"/><path d="m24 24 16-16M32 8h8v8" class="outline"/>',
+moment:'<rect x="7" y="9" width="34" height="32" rx="6" class="main"/><path d="M15 5v9M33 5v9M7 18h34M24 23v8l6 3" class="outline"/>',
+library:'<path d="M7 9c7-3 12-2 17 2v29c-5-4-10-5-17-2V9ZM41 9c-7-3-12-2-17 2v29c5-4 10-5 17-2V9Z" class="main"/><path d="M12 16c3-1 6-.5 9 1M12 23c3-1 6-.5 9 1M36 16c-3-1-6-.5-9 1M36 23c-3-1-6-.5-9 1" class="outline"/>',
+journey:'<path d="M8 36c8 0 8-14 16-14s8 8 16-3" class="route"/><circle cx="9" cy="12" r="6" class="main"/><circle cx="40" cy="9" r="6" class="second"/><circle cx="25" cy="22" r="3.2" class="glass"/>'
 };
-const colors={personal:['#5268ef','#a16bf0'],social:['#d96f9a','#f2a6b5'],digital:['#22a89f','#72d6c8'],career:['#4d78df','#71b5ee'],intellect:['#9365dc','#c29af4'],aspirations:['#5369e8','#4fc5d2'],idea:['#a16bf0','#f0a1c0'],goal:['#20a99d','#75d9c7'],moment:['#d66e91','#f4a5a9'],library:['#4b77dc','#62cbd4'],journey:['#8060df','#55c5d1']};
-if(!icons[id])return '';
-const c=colors[id]||colors.personal,grad='g-'+id;
-return '<svg class="feature-icon" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="'+grad+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/></linearGradient></defs>'+icons[id].replace(/url\(#g\)/g,'url(#'+grad+')')+'</svg>';
+const palette={personal:['#6d8794','#c4a77f'],social:['#718d98','#bba58c'],digital:['#557e8d','#91b2b5'],career:['#607b8d','#c1a47b'],intellect:['#6d8297','#b9a58b'],aspirations:['#5e8292','#c3a77e'],idea:['#6d8794','#c3a77e'],goal:['#587d8d','#c5a579'],moment:['#708a96','#c5a77e'],library:['#607d91','#bda789'],journey:['#597b8b','#c2a77e']};
+if(!shapes[id])return '';
+const c=palette[id]||palette.personal,g='mirati-'+id;
+return '<svg class="feature-icon" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="'+c[1]+'"/><stop offset=".48" stop-color="'+c[0]+'"/><stop offset="1" stop-color="#263f50"/></linearGradient><linearGradient id="'+g+'-shine" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".96"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient><filter id="'+g+'-shadow" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#243c4a" flood-opacity=".28"/></filter></defs><g filter="url(#'+g+'-shadow)" stroke-linecap="round" stroke-linejoin="round">'+shapes[id]+'</g><path d="M9 10c7-7 20-8 29-1" fill="none" stroke="#fff" stroke-width="1.25" opacity=".5" stroke-linecap="round"/></svg>';
 }
 function openDetail(id){const f=facets.find(x=>x.id===id);if(!f)return;activeFacet=id;const d=ensure(),ans=d.facets[id]||{};document.getElementById('detailContent').innerHTML='<div class="detail-hero"><div class="symbol '+f.tone+'">'+facetIcon(f.id)+'</div><h2>'+f.name+'</h2><p>'+f.desc+'</p></div><div class="panel"><h3>أسئلة تساعدك على اكتشاف هذا الجانب</h3>'+f.qs.map((q,i)=>'<div class="answer-block"><p class="question">'+q+'</p><textarea class="field area" id="ans'+i+'" placeholder="اكتب إجابتك هنا...">'+esc(ans[i]||'')+'</textarea></div>').join('')+'<button class="primary full" onclick="saveFacet()">حفظ إجاباتي</button></div><div class="panel"><h3>محتوى مرتبط بهذا الجانب</h3><p class="muted">اربط أفكارك وأهدافك ولحظاتك بهذا الجانب لتكوين صورة مترابطة عن نفسك.</p><div class="list" style="margin-top:10px">'+[...d.ideas,...d.goals,...d.moments].filter(x=>x.facet===id).map(itemCard).join('')+'</div><button class="secondary" style="margin-top:12px" onclick="openComposer(\'idea\',null,\''+id+'\')">＋ أضف محتوى مرتبطًا</button></div>';document.getElementById('detailScreen').classList.add('open');window.scrollTo(0,0)}
 function closeDetail(){document.getElementById('detailScreen').classList.remove('open')}
