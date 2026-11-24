@@ -28,6 +28,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
+      - name: Bundle Cairo Arabic font
+        run: |
+          mkdir -p app/src/main/assets/fonts
+          curl -fL --retry 3 https://cdn.jsdelivr.net/npm/@fontsource/cairo@5.3.0/files/cairo-arabic-400-normal.woff2 -o app/src/main/assets/fonts/cairo-arabic-400-normal.woff2
+          curl -fL --retry 3 https://cdn.jsdelivr.net/npm/@fontsource/cairo@5.3.0/files/cairo-arabic-700-normal.woff2 -o app/src/main/assets/fonts/cairo-arabic-700-normal.woff2
+          test -s app/src/main/assets/fonts/cairo-arabic-400-normal.woff2
+          test -s app/src/main/assets/fonts/cairo-arabic-700-normal.woff2
       - name: Validate embedded JavaScript
         run: node -e 'const fs=require("fs");const h=fs.readFileSync("app/src/main/assets/index.html","utf8");const a=h.indexOf("<script>");const b=h.indexOf("</script>",a);if(a<0||b<0)throw new Error("missing script");new Function(h.slice(a+8,b));console.log("JS syntax OK")'
       - name: Prepare persistent signing key
