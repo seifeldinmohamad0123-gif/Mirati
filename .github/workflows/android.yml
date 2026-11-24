@@ -28,11 +28,26 @@ jobs:
           gradle-version: "8.9"
       - name: Validate embedded JavaScript
         run: node -e 'const fs=require("fs");const h=fs.readFileSync("app/src/main/assets/index.html","utf8");const a=h.indexOf("<script>");const b=h.indexOf("</script>",a);if(a<0||b<0)throw new Error("missing script");new Function(h.slice(a+8,b));console.log("JS syntax OK")'
-      - name: Build debug APK
+      - name: Prepare persistent signing key
+        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_B64: ${{ secrets.MIRATI_KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/mirati-release.jks"
+          echo "MIRATI_KEYSTORE_PATH=$RUNNER_TEMP/mirati-release.jks" >> "$GITHUB_ENV"
+      - name: Build signed release APK
+        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' }}
+        env:
+          MIRATI_STORE_PASSWORD: ${{ secrets.MIRATI_STORE_PASSWORD }}
+          MIRATI_KEY_ALIAS: ${{ secrets.MIRATI_KEY_ALIAS }}
+          MIRATI_KEY_PASSWORD: ${{ secrets.MIRATI_KEY_PASSWORD }}
+        run: gradle --no-daemon assembleRelease
+      - name: Build debug APK (temporary until signing secrets are configured)
+        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 == '' || secrets.MIRATI_STORE_PASSWORD == '' || secrets.MIRATI_KEY_ALIAS == '' || secrets.MIRATI_KEY_PASSWORD == '' }}
         run: gradle --no-daemon assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Mirati-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Mirati-${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' && 'release' || 'debug-temporary' }}-apk
+          path: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' && 'app/build/outputs/apk/release/app-release.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }}
           if-no-files-found: error
