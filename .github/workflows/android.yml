@@ -13,6 +13,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HAS_RELEASE_SIGNING: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -29,25 +31,25 @@ jobs:
       - name: Validate embedded JavaScript
         run: node -e 'const fs=require("fs");const h=fs.readFileSync("app/src/main/assets/index.html","utf8");const a=h.indexOf("<script>");const b=h.indexOf("</script>",a);if(a<0||b<0)throw new Error("missing script");new Function(h.slice(a+8,b));console.log("JS syntax OK")'
       - name: Prepare persistent signing key
-        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' }}
+        if: ${{ env.HAS_RELEASE_SIGNING == 'true' }}
         env:
           KEYSTORE_B64: ${{ secrets.MIRATI_KEYSTORE_BASE64 }}
         run: |
           echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/mirati-release.jks"
           echo "MIRATI_KEYSTORE_PATH=$RUNNER_TEMP/mirati-release.jks" >> "$GITHUB_ENV"
       - name: Build signed release APK
-        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' }}
+        if: ${{ env.HAS_RELEASE_SIGNING == 'true' }}
         env:
           MIRATI_STORE_PASSWORD: ${{ secrets.MIRATI_STORE_PASSWORD }}
           MIRATI_KEY_ALIAS: ${{ secrets.MIRATI_KEY_ALIAS }}
           MIRATI_KEY_PASSWORD: ${{ secrets.MIRATI_KEY_PASSWORD }}
         run: gradle --no-daemon assembleRelease
       - name: Build debug APK (temporary until signing secrets are configured)
-        if: ${{ secrets.MIRATI_KEYSTORE_BASE64 == '' || secrets.MIRATI_STORE_PASSWORD == '' || secrets.MIRATI_KEY_ALIAS == '' || secrets.MIRATI_KEY_PASSWORD == '' }}
+        if: ${{ env.HAS_RELEASE_SIGNING != 'true' }}
         run: gradle --no-daemon assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Mirati-${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' && 'release' || 'debug-temporary' }}-apk
-          path: ${{ secrets.MIRATI_KEYSTORE_BASE64 != '' && secrets.MIRATI_STORE_PASSWORD != '' && secrets.MIRATI_KEY_ALIAS != '' && secrets.MIRATI_KEY_PASSWORD != '' && 'app/build/outputs/apk/release/app-release.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }}
+          name: Mirati-${{ env.HAS_RELEASE_SIGNING == 'true' && 'release' || 'debug-temporary' }}-apk
+          path: ${{ env.HAS_RELEASE_SIGNING == 'true' && 'app/build/outputs/apk/release/app-release.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }}
           if-no-files-found: error
