@@ -24,6 +24,7 @@ android {
         applicationId 'com.mirati.app'
         minSdk 23
         targetSdk 35
+        // Increment both values for every published APK.
         versionCode 4
         versionName '1.0.3'
     }
