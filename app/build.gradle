@@ -25,7 +25,7 @@ android {
         minSdk 23
         targetSdk 35
         // Increment both values for every published APK.
-        versionCode 8
-        versionName '1.0.7'
+        versionCode 9
+        versionName '1.0.8'
     }
 }
